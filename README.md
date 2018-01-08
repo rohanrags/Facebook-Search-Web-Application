@@ -19,4 +19,6 @@ Get hands-on experience in Google Cloud App Engine and Amazon Web Services.
 
 Get hands-on experience on how to use Bootstrap to enhance the user experience.
 
+--> Optimized for Firefox
+
 http://homework8-env.kamd3vgqsa.us-west-2.elasticbeanstalk.com/
