@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0"/>
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+      
+    <!-- Personal stylesheet -->
+    <link rel="stylesheet" type="text/css" href="mystyle.css">
+      
+    <!-- Angular JS -->
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js"></script>
+    
+    <script src="http://code.angularjs.org/1.3.15/angular-animate.js"></script>
+    <script src="moment.js"></script>
+      
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+      
+    <!-- Personal Javascript -->
+    <script src="myscript.js"></script>
+    
+  </head>
+  <body>
+      <div ng-app="myscript" ng-controller="myCtrl">
+          
+        <nav class="navbar navbar-default">
+            <div id="search-navbar" class="container-fluid">
+                <div class="navbar-header">
+                  <h4>FB SEARCH</h4>
+                </div>
+                <div class="col-xs-10 col-md-10">
+                    <form class="navbar-form" role="search">
+                        <div class="form-group">
+                            <div class="input-group">
+                            <input id="keyword" type="text" class="form-control" placeholder="type Something..." title="Please type a keyword" ng-keypress="close()" autocomplete="off" data-placement="bottom">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" id="search-button" ng-click="search_facebook()" type="submit"><span class="glyphicon glyphicon-search white" aria-hidden="true"></span>
+                                </button>
+                            </span>
+                            </div><!-- /input-group -->
+                        </div>
+                        <button id="clear-button" type="submit" class="btn btn-default" ng-click="clear()">Clear</button>
+                    </form>
+                </div>
+            </div><!-- /.container-fluid -->
+            <div id="links-navbar" class="container-fluid">
+                <ul id="type" class="nav nav-tabs nav-justified">
+                    <li id="one" class="active"><a href="javascript:void(0);" ng-click="check_type('user');changeColor($event)">Users</a></li>
+                    <li><a href="javascript:void(0);" ng-click="check_type('page');changeColor($event)">Pages</a></li>
+                    <li><a href="javascript:void(0);" ng-click="check_type('event');changeColor($event)">Events</a></li>
+                    <li><a href="javascript:void(0);" ng-click="check_type('place');changeColor($event)">Places</a></li>
+                    <li><a href="javascript:void(0);" ng-click="check_type('group');changeColor($event)">Groups</a></li>
+                    <li><a href="javascript:void(0);" ng-click="retrieve_local_storage();changeColor($event) ">Favourites</a></li>
+                </ul>
+            <input type="hidden" value="Users" name='hiddenId' id="hiddenId" />
+            </div><!-- /.container-fluid -->
+        </nav><!-- navbar -->
+      
+        
+        <div id="Screen1" class="container">
+            <div ng-show="MainTableShow">  
+                <div id="progress_bar" ng-show="MainTable_Progress_Bar" class="progress">
+                    <div class="progress-bar progress-bar-striped active" role="progressbar" style="width:50%">
+                    </div>
+                </div>
+                <div ng-show="MainTable_Results">
+                    <div class="table-responsive">
+                        <table id="main_table" class="table">
+                            <thead>
+                                <tr ng-show="main_table_headers">
+                                    <th>#</th>
+                                    <th>Profile Photo</th>
+                                    <th>Name</th>
+                                    <th>Favourites</th>
+                                    <th>Details</th>
+                                </tr>
+                                <tr ng-repeat="x in values">
+                                    <td>{{$index + 1}}</td>
+                                    <td><img ng-src="{{x.picture.data.url}}" width='30px' height='30px' alt='Not Found' class='img-circle' /></td>
+                                    <td>{{ x.name }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-default" ng-click="local_storage(x)">
+                                        <span ng-class="star(x)" class="glyphicon" aria-hidden="true"></span>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-default" ng-click="getAlbumsAndPosts(x)">
+                                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+
+                    <div id="pagination_buttons">
+                        <button type="button" class="btn btn-default" ng-click="next(0)" ng-show="previous_button_show">Previous</button>
+                        <button type="button" class="btn btn-default" ng-click="next(1)" ng-show="next_button_show">Next</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+          
+        <div id="Screen2" class="container">
+            <div ng-show="FavouritesTableShow">
+            <div class="table-responsive">
+                <table id="favourites_table" class="table">
+                    <thead>
+                        <tr ng-show="favourites_headers">
+                            <th>#</th>
+                            <th>Profile Photo</th>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Favourites</th>
+                            <th>Details</th>
+                        </tr>
+                        <tr ng-repeat="x in local_storage_values track by $index" ng-show="x">
+                            <td>{{$index + 1}}</td>
+                            <td><img ng-src="{{x.picture.data.url}}" width='30px' height='30px' alt='Not Found' class='img-circle' /></td>
+                            <td>{{x.name}}</td>
+                            <td>{{x.type}}</td>
+                            <td>
+                                <button type="button" class="btn btn-default" ng-click="remove_item_local_storage(x.id)">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                </button>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-default" ng-click="getAlbumsAndPosts(x)">
+                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <div ng-show="!local_storage_length" class="panel panel-warning">
+                                    <div class="panel-heading">
+                                        No data found.
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </thead>
+                </table>
+                </div>
+            </div>
+        </div>
+          
+          <div class="container {{Screen3}}">
+            <div ng-show="AlbumsAndPosts" id="AlbumsPosts">
+                
+                <div class="row">
+                    <input type="hidden" value="id3" ng-model="hiddenId3" />
+                    <button class="btn btn-default left" id="back-button" type="button" ng-click="backButton()"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>Back</button>
+
+                    <button class="btn btn-default right" id="fb-button" type="button" ng-click="fb_share(hiddenId3)"><img ng-src="http://cs-server.usc.edu:45678/hw/hw8/images/facebook.png" alt="Not Found" width="20px" height="20px"/></button>
+
+                    <button class="btn btn-default right" id="star-button" type="button" ng-click="local_storage(hiddenId3)"><span class="glyphicon" ng-class="star(hiddenId3)" aria-hidden="true"></span></button>
+                </div>
+                <br/><br/>
+                
+                <div class="row" id="panels">
+                    <div class="panel panel-default col-sm-6">
+ 
+                      <div class="panel-heading">
+                        <h3 class="panel-title">Albums</h3>
+                      </div>
+                      <div class="panel-body">
+                          
+                        
+                        <div ng-show="albums_progress_bar" class="progress">
+                            <div class="progress-bar progress-bar-striped active" role="progressbar" style="width:50%">
+                            </div>
+                        </div>
+                        <div ng-show="albums_result_show">
+                            <div ng-show="albums_yes_data" class="panel-group" id="accordion">
+                                <div ng-repeat="x in album_values" class="panel panel-default">
+                                    <div class="panel-heading">
+                                            <a data-toggle="collapse" ng-click="open_albums($index)" data-parent="#accordion" href="#d{{x.id}}">{{x.name}}</a>
+                                    </div>
+                                    <div id="d{{x.id}}" ng-class="{ 'in' : $index=='0'}" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <div ng-repeat="y in x.photos">
+                                                <img ng-src="https://graph.facebook.com/v2.8/{{y[0].id}}/picture?type(large)&access_token=EAAN340JsZBjQBALk8fkgg8oa03kJfv6CA9DQ9neExHYoShKZBAj9mSYYEuU1Sm0O0WlQ4hY2NrAXZAZA6G1ZCZAIebsM3ujy9Y45zRJJJF1w7ZC9MC0V8mDpE1WcMNMPG5ZBHLcxPcrKMUeZCmUKKIGtFK7ZAy0o53troAlDR0ptRQkQZDZD" class="img-responsive center-block img-rounded"/> <br/>
+                                                <img ng-src="https://graph.facebook.com/v2.8/{{y[1].id}}/picture?type(large)&access_token=EAAN340JsZBjQBALk8fkgg8oa03kJfv6CA9DQ9neExHYoShKZBAj9mSYYEuU1Sm0O0WlQ4hY2NrAXZAZA6G1ZCZAIebsM3ujy9Y45zRJJJF1w7ZC9MC0V8mDpE1WcMNMPG5ZBHLcxPcrKMUeZCmUKKIGtFK7ZAy0o53troAlDR0ptRQkQZDZD"class="img-responsive center-block img-rounded"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div ng-show="albums_no_data" class="panel panel-warning">
+                              <div class="panel-heading">
+                                No data found.
+                              </div>
+                            </div>
+                        </div>
+                          
+                      </div>
+                    </div>
+                    
+                    <div class="col-sm-1">&nbsp;</div>
+                    <div class="panel panel-default col-sm-5">
+                      <div class="panel-heading">
+                        <h3 class="panel-title">Posts</h3>
+                      </div>
+                      <div class="panel-body">
+                        
+                        <div ng-show="posts_progress_bar" class="progress">
+                            <div class="progress-bar progress-bar-striped active" role="progressbar" style="width:50%">
+                            </div>
+                        </div>
+                          
+                        <div ng-show="posts_result_show">
+                                <input type="hidden" value="id1" ng-model="hiddenId1" />
+                                <input type="hidden" value="id2" ng-model="hiddenId2" />
+                                <div ng-show="posts_yes_data" class="panel-group">
+                                    <div ng-repeat="x in post_values" class="panel panel-default">
+                                        <div id="post_panel" class="panel-heading">
+                                            <img ng-src="https://graph.facebook.com/v2.8/{{hiddenId1}}/picture?type(large)&access_token=EAAN340JsZBjQBALk8fkgg8oa03kJfv6CA9DQ9neExHYoShKZBAj9mSYYEuU1Sm0O0WlQ4hY2NrAXZAZA6G1ZCZAIebsM3ujy9Y45zRJJJF1w7ZC9MC0V8mDpE1WcMNMPG5ZBHLcxPcrKMUeZCmUKKIGtFK7ZAy0o53troAlDR0ptRQkQZDZD" class="img-responsive left" width="40px" height="40px"/>
+                                            <div style="padding-left:4em">
+                                            <b style="display:inline">{{hiddenId2}}</b><br/>
+                                            <p>{{x.time}}</p></div>
+                                        </div>
+
+                                        <div class="panel-body">
+                                            <div>
+                                                {{x.message}}
+                                            </div>
+                                    </div>
+
+                                </div>
+                              </div>
+                          </div>
+                        <div ng-show="posts_no_data" class="panel panel-warning">
+                            <div class="panel-heading">
+                                No data found.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+      </div>
+          
+    </div><!-- Angular controller -->
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        
+  </body>
+</html>

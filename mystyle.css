@@ -1,0 +1,176 @@
+/*getting rid of rounded corners*/
+#search-button{
+  border-radius: 0 ;
+}
+
+/*glyphicon to make white*/
+.white, .white a {
+  color: #fff;
+}
+
+.fb-blue {
+    color: white;
+    background-color: #3b5998;
+}
+
+/*fullscreen*/
+.container-fluid {
+    padding: 0;
+}
+
+.container {
+    padding: 1px;
+}
+
+.navbar-header h4{
+    color: #3b5998;
+    margin-left: 2em;
+}
+
+.navbar-form {
+    text-align: center;
+}
+
+/*search button glyphicon*/
+#search-button {
+    width: 8em;
+    background-color: #3b5998;
+}
+
+/*Links navbar color and bottom*/
+#links-navbar{
+    border-bottom: 1px solid #3b5998;
+    background-color: white;
+}
+.nav-tabs {
+background-color: white ;
+border-bottom-color: #3b5998;  
+}
+
+.nav-tabs>li.active>a {
+background-color: #3b5998 !important;
+color: white !important;
+}
+.nav-tabs>li>a {
+color: black;
+}
+.nav-tabs>li>a:hover {
+border-color: white !important;
+background-color: white !important;
+}
+.nav-tabs>li.active>a:hover {
+background-color: #3b5998 !important;
+}
+
+
+.gold{
+    color:gold;
+}
+
+.left {
+    float: left;
+    display:inline-block;
+    overflow: auto;
+}
+
+.right {
+    float: right;
+    display:inline-block;
+    overflow: auto;
+}
+
+.row {
+    margin : 0;
+}
+
+.panel{
+    padding: 0;
+}
+
+#post_panel{
+    background-color: white;
+}
+
+#panels {
+    overflow: hidden;
+    clear: both;
+}
+
+#pagination_buttons{
+    text-align: center;
+}
+
+/*
+#Screen1{
+    padding-top: 8em;
+}
+*/
+
+#keyword{
+    width:25em;
+}
+
+#clear-button{
+        margin-left: 2em;
+        height: 2.4em;
+        border: 1px solid #3b5998;
+        border-radius: 0 ;
+}
+
+@media only screen and (max-width: 600px) {
+/*
+    #Screen1 {
+      padding-top: 20em;
+    }
+*/  .container {
+        padding: 0 20px;
+    }
+    
+    #keyword{
+        width:16em;
+        border-radius: 0 ;
+    }
+    
+    .navbar-form {
+        display: inline-flex;
+    }
+
+    #search-button{
+        width: 4em;
+        height: 2.5em;
+    }
+    
+    #clear-button{
+        margin-left: 2em;
+        height: 2.4em;
+        border: 1px solid #3b5998;
+        border-radius: 0 ;
+    }
+    
+    .nav-tabs>li>a{
+        line-height: 0.01em;
+    }
+}
+
+#fb-button{
+    margin-left:2em;
+}
+
+#progress_bar{
+    margin:10em;
+}
+
+.screen_in{
+    position: relative;
+/*    border:2px solid orange;*/
+    width: 90%;
+    left: 0em;
+    transition: all ease-in-out 0.5s;
+}
+
+.screen_out{
+    position: relative;
+/*    border:2px solid orange;*/
+    left: -120em;
+    transition: all ease-in-out 0.5s;
+}
